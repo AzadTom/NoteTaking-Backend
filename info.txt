@@ -1,0 +1,25 @@
+
+1. Create a database in mongodb server
+
+2. Create a collection in the database which is in mongodb server
+
+3. Create a document in the collection which is in the database which is in mongodb Server
+
+
+#MONGODB
+1. mongodb is a NoSQL database, a collection == a table , a document == a row .
+2. mongodb keeps data in json format .
+3. mongodb stores data in a binary encoded fomrat called BSON(binary json).
+4. It is designed to be lightweight and efficient for both  storage and processing .
+5. The use of BSON allows mongodb to store complex data structure and 
+   various data types in a more compact and optimized way compared to plain text json .
+
+
+
+
+
+#MONGOOSE NPM PACKAGE
+
+1. Schema : Defines the structure and constraits for the data stored in a collection. ( structure of document which is going to stored in a collection)
+2. Model : It is a interface to interact with specific database collection and perform some operation as well or Model represents the interaction with a specific mongodb collection.
+            By default , the collection associated with model name .  Created a collection at the model time automatically in mongodb.
