@@ -7,6 +7,7 @@ import {userRouter} from "./routers/userRouter.js";
 import { connectPassword } from "./utils/provider.js";
 import session from "express-session";
 import passport from "passport";
+import path from 'path';
 
 const app = express();
 
@@ -37,7 +38,8 @@ class Server {
 
      app.get("/",(req,res)=>{
 
-        res.status(201).json({message:"I am working!"});
+        res.status(201).render("resetPassword");
+
 
      })
 
@@ -48,6 +50,8 @@ class Server {
     middleWare(){
 
 
+       
+        app.use(express.static(path.join(path.resolve(),"public")));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(cookieParser());
@@ -61,6 +65,8 @@ class Server {
         app.use(passport.session());
         app.enable("trust proxy");
         connectPassword();
+
+        app.set("view engine","ejs");
 
     }
 

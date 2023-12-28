@@ -1,42 +1,110 @@
 import { userModel } from "../models/userModel.js";
 import {ErrorHandler} from '../utils/error.js';
+import { sendEmail } from "../utils/sendEmail.js";
 import bcryptjs from 'bcryptjs';
 import jwt  from "jsonwebtoken";
+import crypto from 'crypto';
 
 
 
-
-export const isAuthenticate = async(req,res,next)=>{
-
-
-    const googletoken  = await req.cookies["connect.sid"];
-
-    const usertoken = await req.cookies["usertoken"];
+export const forget = async(req,res,next)=>{
 
 
 
-    if(!googletoken || !req.user)
+    const email = req.body.email;
+
+
+    const resetToken = crypto.randomBytes(20).toString('hex');
+
+    const isFound = await userModel.findOne({email});
+
+
+    if(!isFound)
     {
-
-        if(!usertoken)
-        {
-
-            next(new ErrorHandler("user not loggedIn;",404));
-        }
-        else{
-
-            next();
-
-        }
-
-
-    }else{
-
-        next();
+        return next(new ErrorHandler("user not found!",404));
     }
 
-   
+
+    isFound.resetPasswordToken = resetToken;
+    isFound.resetPasswordExpires = Date.now()+3600000;
+
+    await isFound.save();
+
+    
+    sendEmail(email,"Password-reset",req.headers.host,resetToken);
+    
+    res.status(200).json({message:"Password reset email sent. Check in your inbox!"});
+
+
+
 }
+
+export const resetPassword = async(req,res,next)=>{
+
+
+    try {
+
+        const {token}= req.params;
+
+        const user = await userModel.findOne({
+            resetPasswordToken:token,
+            resetPasswordExpires:{$gt:Date.now()},
+        });
+
+        if(!user)
+        {
+            return res.status(400).json({message:"Invalid or expired token"});
+        }
+
+        res.render("resetPassword",{token});
+        
+    } catch (error) {
+
+        next(error);
+        
+    }
+
+
+}
+
+
+
+export const changePassword = async(req,res,next)=>{
+
+
+    try {
+
+        const {password} = req.body;
+        const{token}  = req.params;
+
+        const user = await userModel.findOne({
+            resetPasswordToken:token,
+            resetPasswordExpires:{$gt:Date.now()},
+        });
+
+        if(!user)
+        {
+            return res.status(400).json({message:"Invalid or expired token"});
+        }
+
+        const hashedpassword = await bcryptjs.hash(password,10);
+
+        user.password = hashedpassword;
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+
+        await user.save();
+
+        res.status(200).json({message:"password-reset successfully!"});
+
+        
+    } catch (error) {
+        
+        next(error);
+    }
+}
+
+
 
 
 export const myProfile = async(req,res)=>{

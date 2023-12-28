@@ -23,7 +23,7 @@ export const connectPassword =  ()=>{
                 const newUser = await googleModel.create({
                 googleId:profile.id,
                 name:profile.displayName,
-                photo:profile.photos[0].value
+                email:profile.emails[0].value
             })
 
             return done(null,newUser);
@@ -44,7 +44,7 @@ export const connectPassword =  ()=>{
 
      passport.serializeUser((user,done)=>{
 
-         done(null,user.id);
+         done(null,user._id);
 
      });
 
@@ -53,7 +53,7 @@ export const connectPassword =  ()=>{
      passport.deserializeUser(async (id,done)=>{
 
         const user  = await googleModel.findById(id);
-          done(null,user);
+        done(null,user);
 
      });
 

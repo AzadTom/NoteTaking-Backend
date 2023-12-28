@@ -10,11 +10,13 @@ const googleSchema =  new mongoose.Schema({
     name:{
         type:String,
         required:true,
-    },
-
-    photo:{
+    }
+    ,
+    email:{
+        
         type:String,
         required:true
+
     },
 
     createdAt:{
