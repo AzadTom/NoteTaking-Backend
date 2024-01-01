@@ -11,6 +11,7 @@ import { connectPassword } from "./utils/provider.js";
 import session from "express-session";
 import passport from "passport";
 import path from 'path';
+import cors from 'cors';
 
 const app = express();
 
