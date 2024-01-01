@@ -8,11 +8,11 @@
 
 
 
-        import {errorMiddleware } from './middleware/errorMiddleware.js';
+        import {errorMiddleWare } from './middleware/errorMiddleware.js';
         
         const app = express();
         
-        app.use(errorMiddleware);
+        app.use(errorMiddleWare);
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
         
@@ -30,7 +30,7 @@
         })
 
 ## Static Resource
-
+        import path from 'path';   
      app.use(express.static(path.join(path.resolve(),"public")));
 
 
@@ -40,7 +40,8 @@
 
 
  ##  Cors
- ##### cors stand for  cross origin resource sharing  which is http header implemented by browser for security purpose it allows resources  to same domain  over server ,  any different domain can not access resource from server   
+ ##### cors stand for  cross origin resource sharing  which is http header implemented by browser for security purpose it allows resources  to same domain  over server ,  any different domain can not access resource from server 
+      import cors from 'cors';   
       app.use(cors({
                 origin:[process.env.FRONTEND],
                 methods:["GET","POST","DELETE","PUT","PATCH"],
