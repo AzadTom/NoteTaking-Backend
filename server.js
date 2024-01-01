@@ -1,5 +1,5 @@
 import express from "express";
-import {errorMiddleware } from './middleware/errorMiddleware.js';
+import {errorMiddleWare } from './middleware/errorMiddleware.js';
 import { mongodb } from "./database/database.js";
 import { config } from "dotenv";
 import cookieParser from "cookie-parser";
@@ -56,7 +56,7 @@ class Server {
 
 
         app.set("view engine","ejs");
-        app.use(errorMiddleware);
+        app.use(errorMiddleWare);
         app.use(express.static(path.join(path.resolve(),"public")));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
