@@ -4,7 +4,7 @@ export const mongodb = async()=>{
 
     try {
 
-        await mongoose.connect(process.env.DB_HOST,{dbName:"bloging"})
+        await mongoose.connect(process.env.DB_HOST,{dbName:"collabrated"})
         .then(()=>console.log("database is connected!"))
         .catch((error)=> console.log(error))
         
