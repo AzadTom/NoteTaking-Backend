@@ -44,7 +44,7 @@ class Server {
 
      app.get("/",(req,res)=>{
 
-        res.status(201).render("resetPassword");
+        res.json({message:"home"});
 
 
      })
