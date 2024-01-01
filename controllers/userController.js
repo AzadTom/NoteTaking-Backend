@@ -1,5 +1,4 @@
 import { userModel } from "../models/userModel.js";
-import {ErrorHandler} from '../utils/error.js';
 import { sendEmail } from "../utils/sendEmail.js";
 import bcryptjs from 'bcryptjs';
 import jwt  from "jsonwebtoken";
@@ -108,23 +107,6 @@ export const changePassword = async(req,res,next)=>{
 
 
 export const myProfile = async(req,res)=>{
-
-
-    const usertoken = await req.cookies["usertoken"];
-
-
-    if(usertoken)
-    {
-
-        const token = jwt.verify(usertoken,process.env.JWT);
-
-        const user  = await userModel.findById(token.id);
-    
-        req.user = user;
-
-    }
-
-   
 
     await res.status(200).json({message:true,user:req.user});
 

@@ -1,9 +1,12 @@
 import express from "express";
+import {errorMiddleware } from './middleware/errorMiddleware.js';
 import { mongodb } from "./database/database.js";
 import { config } from "dotenv";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import {userRouter} from "./routers/userRouter.js";
+import {noteRouter} from './routers/noteRouter.js';
+import { collabRouter } from "./routers/collabRouter.js";
 import { connectPassword } from "./utils/provider.js";
 import session from "express-session";
 import passport from "passport";
@@ -26,6 +29,8 @@ class Server {
         this.middleWare();
         this.init();
         this.user();
+        this.note();
+        this.collab();
         this.listenServer();
         
         
@@ -50,7 +55,8 @@ class Server {
     middleWare(){
 
 
-       
+        app.set("view engine","ejs");
+        app.use(errorMiddleware);
         app.use(express.static(path.join(path.resolve(),"public")));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
@@ -60,13 +66,20 @@ class Server {
             saveUninitialized:false,
             resave:false,
         }));
+        
         app.use(passport.authenticate("session"));
         app.use(passport.initialize());
         app.use(passport.session());
         app.enable("trust proxy");
         connectPassword();
 
-        app.set("view engine","ejs");
+        app.use(cors({
+            origin:[process.env.FRONTEND],
+            methods:["GET","POST","DELETE","PUT","PATCH"],
+            credentials:true
+          }))
+
+       
 
     }
 
@@ -81,13 +94,23 @@ class Server {
         app.use("/api/v1/users",userRouter);
     }
 
+    note(){
+
+        app.use("/api/v1/notes",noteRouter);
+    }
+
+    collab(){
+
+        app.use("/api/v1/collabs",collabRouter);
+    }
+
 
     listenServer(){
 
 
     app.listen(process.env.PORT,()=>{
 
-        console.log(`server is running on ${process.env.PORT}`);
+        console.log(`server is running on ${process.env.PORT} in ${process.env.NODE_ENV}`);
     })
 
     }
