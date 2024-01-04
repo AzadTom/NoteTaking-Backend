@@ -233,7 +233,7 @@ export const signup = async(req,res,next)=>{
 
         if(user){
 
-            return next( new ErrorHandler("user already registered!",404));
+            return next(new ErrorHandler("user already registered!",404));
 
         }
 

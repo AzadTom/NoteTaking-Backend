@@ -29,9 +29,7 @@ class Server {
         this.db();
         this.middleWare();
         this.init();
-        this.user();
-        this.note();
-        this.collab();
+        this.routes();
         this.listenServer();
         
         
@@ -42,7 +40,7 @@ class Server {
     init(){
 
 
-     app.get("/",(req,res)=>{
+      app.get("/",(req,res)=>{
 
         res.json({message:"home"});
 
@@ -57,7 +55,6 @@ class Server {
 
 
         app.set("view engine","ejs");
-        app.use(errorMiddleWare);
         app.use(express.static(path.join(path.resolve(),"public")));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({ extended: true }));
@@ -90,20 +87,15 @@ class Server {
 
     }
 
-    user(){
+    routes(){
 
         app.use("/api/v1/users",userRouter);
-    }
-
-    note(){
-
         app.use("/api/v1/notes",noteRouter);
-    }
-
-    collab(){
-
         app.use("/api/v1/collabs",collabRouter);
+        app.use(errorMiddleWare);
     }
+
+   
 
 
     listenServer(){
