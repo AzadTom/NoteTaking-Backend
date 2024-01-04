@@ -3,6 +3,7 @@ import { sendEmail } from "../utils/sendEmail.js";
 import bcryptjs from 'bcryptjs';
 import jwt  from "jsonwebtoken";
 import crypto from 'crypto';
+import { ErrorHandler } from "../utils/error.js";
 
 
 
