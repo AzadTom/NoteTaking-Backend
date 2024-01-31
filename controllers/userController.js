@@ -106,78 +106,6 @@ export const changePassword = async(req,res,next)=>{
 
 
 
-
-export const myProfile = async(req,res)=>{
-
-    await res.status(200).json({message:true,user:req.user});
-
-}
-
-export const logout = async(req,res,next)=>{
-
-
-
-    
-
-    try {
-
-
-        const usertoken = await req.cookies["usertoken"];
-
-        const googletoken  = await req.cookies["connect.sid"];
-        
-
-        if(!googletoken){
-
-            if(!usertoken)
-            {
-                return next(new ErrorHandler("user not loggedIn!",404));
-            }
-            else{
-
-                await res.status(200).cookie(process.env.COOKIE,"",{
-                    httpOnly:true,
-                    maxAge:15*60*1000,
-                    sameSite:process.env.NODE_ENV === "Development"? "lax":"none",
-                    secure:process.env.NODE_ENV === "Development"? false :true
-                }).json({success:true,usertoken})
-            }
-
-            
-        }else
-        {
-
-            await req.logOut((err)=>{
-
-                if(err)
-                {
-                    return next(err);
-                }
-                else{
-
-                    
-                    res.redirect("/");
-                    
-                }
-            });
-            
-
-
-
-        }
-
-
-       
-        
-    } catch (error) {
-
-
-        next(error);
-        
-    }
-
-}
-
 export const login = async(req,res,next)=>{
 
 
@@ -204,12 +132,7 @@ export const login = async(req,res,next)=>{
 
     const token = jwt.sign({id:user._id},process.env.JWT);
 
-    res.status(201).cookie(process.env.COOKIE,token,{
-        httpOnly:true,
-        maxAge:15*60*1000,
-        sameSite:process.env.NODE_ENV === "Development"? "lax":"none",
-        secure:process.env.NODE_ENV === "Development"? false :true
-    }).json({founduser:user,token});
+    res.status(200).json({user:user,token});
 
     
   } catch (error) {
@@ -248,12 +171,7 @@ export const signup = async(req,res,next)=>{
 
         const token  = jwt.sign({id:registeruser._id},process.env.JWT);
 
-        res.status(201).cookie(process.env.COOKIE,token,{
-            httpOnly:true,
-            maxAge:15*60*1000,
-            sameSite:process.env.NODE_ENV === "Development"? "lax":"none",
-            secure:process.env.NODE_ENV === "Development"? false :true
-        }).json({createduser:registeruser,token});
+        res.status(201).json({user:registeruser,token});
 
 
         

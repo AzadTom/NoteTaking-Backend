@@ -1,44 +1,50 @@
 import { ErrorHandler } from "../utils/error.js";
 import { userModel } from "../models/userModel.js";
-import jwt  from "jsonwebtoken";
+import Jwt  from "jsonwebtoken";
 
 export const isAuthenticate = async(req,res,next)=>{
 
 
     const googletoken  = await req.cookies["connect.sid"];
 
-    const usertoken = await req.cookies["usertoken"];
-
-
    
+    let usertoken  = req.headers["authorization"];
 
-    if(!googletoken || !req.user)
-    {
+    console.log(usertoken);
 
 
-       
+
+    try {
 
         if(!usertoken)
         {
-
-            next(new ErrorHandler("user not loggedIn;",404));
+    
+            next(new ErrorHandler("user not loggedIn",404));
         }
         else
         {
-
-            const token = jwt.verify(usertoken,process.env.JWT);
+    
+                usertoken = usertoken.split(" ")[1];
+    
+                const token = Jwt.verify(usertoken,process.env.JWT);
         
                 const user  = await userModel.findById(token.id);
             
                 req.user = user;
-
+    
                 next();
         }
         
-    }else{
-
-        next();
+    } catch (error) {
+        
+        next(error);
     }
+    
+
+       
+
+        
+        
+}
 
    
-}

@@ -6,8 +6,8 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import {userRouter} from "./routers/userRouter.js";
 import {noteRouter} from './routers/noteRouter.js';
-import { collabRouter } from "./routers/collabRouter.js";
-import { connectPassword } from "./utils/provider.js";
+import {collabRouter } from "./routers/collabRouter.js";
+import {connectPassword } from "./utils/provider.js";
 import session from "express-session";
 import passport from "passport";
 import path from 'path';
@@ -42,9 +42,7 @@ class Server {
 
       app.get("/",(req,res)=>{
 
-        res.json({message:"home"});
-
-
+        res.status(200).json({api:"api is working!"});
      })
 
 
@@ -101,10 +99,10 @@ class Server {
     listenServer(){
 
 
-    app.listen(process.env.PORT,()=>{
+        app.listen(process.env.PORT,()=>{
 
-        console.log(`server is running on ${process.env.PORT} in ${process.env.NODE_ENV}`);
-    })
+            console.log(`server is running on ${process.env.PORT} in ${process.env.NODE_ENV}`);
+        })
 
     }
 

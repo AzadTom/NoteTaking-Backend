@@ -80,3 +80,29 @@ export const updateNotes = async(req,res,next)=>{
     }
 
 }
+
+
+export const deleteNotes = async(req,res,next)=>{
+
+
+    try {
+
+       
+        const {id} = req.params;
+
+        const isSuccessfull = await notemodel.deleteOne({_id:id ,user:req.user._id});
+
+        if(!isSuccessfull)
+        {
+            return res.status(400).json({message:"not created successfully!",isSuccessfull});
+        }
+
+
+        res.status(201).json({message:"deleted successfully!",isSuccessfull});
+        
+    } catch (error) {
+     
+        next(error);
+    }
+
+}
