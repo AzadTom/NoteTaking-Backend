@@ -50,6 +50,35 @@ export const createNotes = async(req,res,next)=>{
 }
 
 
+export const getnote = async(req,res,next)=>{
+
+
+    try {
+
+        const {id} = req.params;
+
+        const isSuccessfull = await notemodel.findOne({
+            user:req.user._id,
+            _id:id
+        });
+
+
+        if(!isSuccessfull)
+        {
+            return res.status(400).json({message:"not created successfully!",isSuccessfull});
+        }
+
+
+        res.status(201).json({message:"created successfully!",isSuccessfull});
+        
+    } catch (error) {
+     
+        next(error);
+    }
+
+}
+
+
 
 export const updateNotes = async(req,res,next)=>{
 
