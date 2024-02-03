@@ -65,11 +65,11 @@ export const getnote = async(req,res,next)=>{
 
         if(!isSuccessfull)
         {
-            return res.status(400).json({message:"not created successfully!",isSuccessfull});
+            return res.status(400).json({message:"not get successfully!",isSuccessfull});
         }
 
 
-        res.status(201).json({message:"created successfully!",isSuccessfull});
+        res.status(201).json({message:"get successfully!",isSuccessfull});
         
     } catch (error) {
      
