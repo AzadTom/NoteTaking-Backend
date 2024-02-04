@@ -8,7 +8,7 @@ import { ErrorHandler } from '../utils/error.js';
 const collabRouter = express.Router();
 
 
-collabRouter.post("/",isAuthenticate,async(req,res)=>{
+collabRouter.post("/",isAuthenticate,async(req,res,next)=>{
 
    
      try {
