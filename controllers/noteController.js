@@ -1,5 +1,5 @@
 import {notemodel} from '../models/noteModel.js';
-
+import {collabModel} from '../models/collabModel.js';
 
 
 export const getAllNotes = async(req,res,next)=>{
@@ -120,10 +120,11 @@ export const deleteNotes = async(req,res,next)=>{
         const {id} = req.params;
 
         const isSuccessfull = await notemodel.deleteOne({_id:id ,user:req.user._id});
+        const isCollabnote  = await collabModel.deleteOne({noteId:id});
 
-        if(!isSuccessfull)
+        if(!isSuccessfull && !isCollabnote)
         {
-            return res.status(400).json({message:"not created successfully!",isSuccessfull});
+            return res.status(400).json({message:"not deleted successfully!",isSuccessfull});
         }
 
 
