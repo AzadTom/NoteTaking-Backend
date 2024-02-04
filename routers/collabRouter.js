@@ -106,6 +106,38 @@ collabRouter.get("/collabnotes",isAuthenticate,async(req,res,next)=>{
 })
 
 
+collabRouter.put("/update/:id",isAuthenticate,async(req,res,next)=>{
+
+
+    try {
+
+        const {title,content} = req.body;
+        const {id} = req.params;
+
+        const isSuccessfull = await notemodel.findByIdAndUpdate(id,{
+            title:title,
+            content:content
+        },{new:true});
+
+
+        if(!isSuccessfull)
+        {
+            return res.status(400).json({message:"not created successfully!",isSuccessfull});
+        }
+
+
+        res.status(201).json({message:"created successfully!",isSuccessfull});
+        
+    } catch (error) {
+     
+        next(error);
+    }
+
+})
+
+
+
+
 collabRouter.get("/",isAuthenticate,async(req,res)=>{
 
     const lists  = await collabModel.find({});
