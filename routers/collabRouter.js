@@ -2,6 +2,7 @@ import express from 'express';
 import {collabModel} from '../models/collabModel.js';
 import { notemodel } from '../models/noteModel.js';
 import  { isAuthenticate} from '../middleware/userAuthenticate.js';
+import { ErrorHandler } from '../utils/error.js';
 
 
 const collabRouter = express.Router();
@@ -10,48 +11,38 @@ const collabRouter = express.Router();
 collabRouter.post("/",isAuthenticate,async(req,res)=>{
 
    
-    const { noteid , emailslist} = req.body;
-    const {_id:userId} = req.user;
+     try {
+
+        const { noteid , email} = req.body;
+        const {_id:userId} = req.user;
 
 
 
-    const isFound = await collabModel.findOne({noteId:noteid});
+        const isCollabexist = await collabModel.findOne({noteId:noteid,user:email})
+        
+         if(isCollabexist)
+         {
+             return next(new ErrorHandler("collab is already exist!",404));
+         }
 
-    if(isFound)
-    {
-        const iscollabupdated  = await isFound.updateOne ({
+         const iscollabcreated  = await collabModel.create({
             userId:userId,
             noteId: noteid,
-            users:emailslist,
+            user:email,
         })
 
 
-        if(!iscollabupdated)
-        {
-            return res.status(400).json({message:false,iscollabupdated});
-        }
+        res.status(201).json({message:true, iscollabcreated});
+        
+    
+     } catch (error) {
+        
+        next(error);
 
-        res.status(200).json({message:true,iscollabupdated});
-
-    }
-    else
-    {
-
-        const iscollabcreated  = await collabModel.create({
-            userId:userId,
-            noteId: noteid,
-            users:emailslist,
-        })
+     }
 
 
-        if(!iscollabcreated)
-        {
-            return res.status(400).json({message:false,iscollabcreated});
-        }
-
-        res.status(201).json({message:true,iscollabcreated});
-
-    }
+    
     
 })
 
@@ -62,9 +53,8 @@ collabRouter.get("/invitenotes",isAuthenticate,async(req,res,next)=>{
 
      try {
 
-        const currentEmail  = req.user.email;
 
-        const collabslist = await collabModel.find({users:{$in:[currentEmail]}});
+        const collabslist = await collabModel.find({user:req.user.email});
 
         const collabnotes = [];
 
@@ -75,7 +65,7 @@ collabRouter.get("/invitenotes",isAuthenticate,async(req,res,next)=>{
 
         }
 
-        res.json({ inviteuser :collabnotes });
+        res.json({collabnotes});
         
      } catch (error) {
         

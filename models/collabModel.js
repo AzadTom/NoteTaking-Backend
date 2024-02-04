@@ -15,9 +15,9 @@ const collabSchema = new mongoose.Schema({
         required:true,
     },
 
-    users:{
-        type:[String],
-        default:[],
+    user:{
+        type:String,
+        required:true,
     }
 })
 
