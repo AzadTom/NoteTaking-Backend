@@ -136,6 +136,32 @@ collabRouter.put("/update/:id",isAuthenticate,async(req,res,next)=>{
 })
 
 
+collabRouter.get("/note/:id",isAuthenticate,async(req,res,next)=>{
+
+
+    try {
+
+        const {id} = req.params;
+
+        const isSuccessfull = await notemodel.findByIdAndUpdate(id);
+
+
+        if(!isSuccessfull)
+        {
+            return res.status(400).json({message:"not created successfully!",isSuccessfull});
+        }
+
+
+        res.status(201).json({message:"created successfully!",isSuccessfull});
+        
+    } catch (error) {
+     
+        next(error);
+    }
+
+})
+
+
 
 
 collabRouter.get("/",isAuthenticate,async(req,res)=>{
